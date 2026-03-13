@@ -19,7 +19,7 @@ body {
 
 .matrix-wrapper {
   position: relative;
-  padding: 40px;
+  padding: 10px; /* Reduced padding since axes are gone */
 }
 
 .matrix {
@@ -42,10 +42,10 @@ body {
 }
 
 /* Quadrant Colors */
-#q1 { background-color: #ff8a80; } /* 빨강 (중요/급함) */
-#q2 { background-color: #ffebee; } /* 연빨강 (중요/여유) */
-#q3 { background-color: #81c784; } /* 초록 (일반/급함) */
-#q4 { background-color: #e8f5e9; } /* 연초록 (일반/여유) */
+#q1 { background-color: #ff8a80; } /* 빨강 (중요긴급) */
+#q2 { background-color: #ffebee; } /* 연빨강 (중요여유) */
+#q3 { background-color: #81c784; } /* 초록 (일반긴급) */
+#q4 { background-color: #e8f5e9; } /* 연초록 (일반여유) */
 
 .quadrant-header {
   display: flex;
@@ -99,7 +99,7 @@ body {
   align-items: center;
   cursor: grab;
   font-size: 0.9rem;
-  min-height: 30px; /* 낮은 height 카드 형태 */
+  min-height: 30px;
 }
 
 .task-item:active {
@@ -119,25 +119,4 @@ body {
 
 .delete-btn:hover {
   opacity: 1;
-}
-
-/* Axis Labels */
-.axis {
-  position: absolute;
-  font-weight: bold;
-  color: #666;
-  font-size: 0.9rem;
-}
-
-.y-axis {
-  top: 50%;
-  left: 0;
-  transform: rotate(-90deg) translateY(-50%);
-  transform-origin: left top;
-}
-
-.x-axis {
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
 }

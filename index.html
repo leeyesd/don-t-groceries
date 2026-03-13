@@ -9,12 +9,11 @@
 <body>
   <div class="container">
     <div class="matrix-wrapper">
-      <div class="axis y-axis">중요한 것</div>
       <div class="matrix">
-        <!-- Q1: 중요하고 급한 일 -->
+        <!-- Q1: 중요긴급 -->
         <div id="q1" class="quadrant" ondrop="drop(event)" ondragover="allowDrop(event)">
           <div class="quadrant-header">
-            <h2>중요하고 급한 일</h2>
+            <h2>중요긴급</h2>
             <button class="add-btn" onclick="promptAddTask('q1')">+</button>
           </div>
           <ul class="task-list">
@@ -29,10 +28,10 @@
           </ul>
         </div>
 
-        <!-- Q2: 중요하지만 여유로운 일 -->
+        <!-- Q2: 중요여유 -->
         <div id="q2" class="quadrant" ondrop="drop(event)" ondragover="allowDrop(event)">
           <div class="quadrant-header">
-            <h2>중요하지만 여유로운 일</h2>
+            <h2>중요여유</h2>
             <button class="add-btn" onclick="promptAddTask('q2')">+</button>
           </div>
           <ul class="task-list">
@@ -47,10 +46,10 @@
           </ul>
         </div>
 
-        <!-- Q3: 중요하지 않지만 급한 일 -->
+        <!-- Q3: 일반긴급 -->
         <div id="q3" class="quadrant" ondrop="drop(event)" ondragover="allowDrop(event)">
           <div class="quadrant-header">
-            <h2>중요하지 않지만 급한 일</h2>
+            <h2>일반긴급</h2>
             <button class="add-btn" onclick="promptAddTask('q3')">+</button>
           </div>
           <ul class="task-list">
@@ -65,10 +64,10 @@
           </ul>
         </div>
 
-        <!-- Q4: 중요하지 않고 여유로운 일 -->
+        <!-- Q4: 일반여유 -->
         <div id="q4" class="quadrant" ondrop="drop(event)" ondragover="allowDrop(event)">
           <div class="quadrant-header">
-            <h2>중요하지 않고 여유로운 일</h2>
+            <h2>일반여유</h2>
             <button class="add-btn" onclick="promptAddTask('q4')">+</button>
           </div>
           <ul class="task-list">
@@ -83,7 +82,6 @@
           </ul>
         </div>
       </div>
-      <div class="axis x-axis">급한 것</div>
     </div>
   </div>
   <script defer src="/main.js"></script>
