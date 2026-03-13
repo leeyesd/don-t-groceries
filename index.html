@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eisenhower Matrix - Final Precise Reconstruction</title>
+  <title>Eisenhower Matrix - Refined UI</title>
   <style>
     /* Reset and Base Styles */
     * {
@@ -55,33 +55,44 @@
     .q-bottom-left { background-color: #58E9B8; }
     .q-bottom-right { background-color: #E2E2E0; }
 
+    /* Titles - Top-Left Aligned, 50% Size (55px) */
     .big-text {
       position: absolute;
       color: #000000;
-      font-size: 110px;
+      font-size: 55px; /* Reduced from 110px */
       font-weight: 400;
-      letter-spacing: -2px;
+      letter-spacing: -1px;
       line-height: 1;
       text-transform: uppercase;
       z-index: 1;
       pointer-events: none;
+      top: 25px;
+      left: 25px;
     }
 
-    .text-now-focus { left: 45px; top: 45px; }
-    .text-focus-top { left: 45px; top: 45px; }
-    .text-now-bottom { left: 45px; bottom: 45px; }
+    /* Cancelled text adjustments */
     .text-focus-cancelled {
-      left: 45px;
-      bottom: 45px;
       color: #A19D99;
       text-decoration: line-through;
-      text-decoration-thickness: 10px;
+      text-decoration-thickness: 5px; /* Reduced proportional to font size */
+    }
+
+    /* Plus Button - Top-Right Aligned, Thin */
+    .add-plus {
+      position: absolute;
+      top: 25px;
+      right: 25px;
+      font-size: 45px; /* Smaller than title's 55px */
+      font-weight: 100; /* Thin */
+      color: #000;
+      z-index: 10;
+      line-height: 0.8;
     }
 
     .small-white-text {
       position: absolute;
       color: #FFFFFF;
-      font-size: 24px;
+      font-size: 18px;
       font-weight: 400;
       text-transform: uppercase;
       letter-spacing: 1px;
@@ -89,7 +100,7 @@
       z-index: 2;
     }
 
-    .as-soon-as { left: 45px; bottom: 25px; }
+    .as-soon-as { left: 25px; bottom: 15px; }
 
     .to-do-first {
       position: absolute;
@@ -98,7 +109,7 @@
       text-transform: uppercase;
       transform: rotate(-90deg);
       transform-origin: left bottom;
-      left: 720px; /* Adjusted to sit on the boundary */
+      left: 720px; 
       top: 69px;
       white-space: nowrap;
       pointer-events: none;
@@ -111,26 +122,21 @@
       left: 0;
       width: 100%;
       height: 100%;
-      padding: 160px 45px 45px 45px;
+      padding: 100px 25px 25px 25px; /* Top padding to avoid title overlap */
       display: flex;
       flex-wrap: wrap;
       align-content: flex-start;
-      gap: 15px;
+      gap: 12px;
       pointer-events: none;
       z-index: 5;
     }
 
-    .q-bottom-left .task-container, 
-    .q-bottom-right .task-container {
-      padding: 45px 45px 160px 45px;
-    }
-
     .task-card {
-      width: calc(50% - 8px);
-      min-height: 70px;
+      width: calc(50% - 6px);
+      min-height: 60px;
       background: rgba(255, 255, 255, 0.95);
-      padding: 12px;
-      font-size: 15px;
+      padding: 10px;
+      font-size: 14px;
       color: #333;
       border: 1px solid rgba(0,0,0,0.05);
       display: flex;
@@ -139,13 +145,13 @@
       justify-content: center;
       text-align: center;
       pointer-events: auto;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
 
     .task-card .date-label {
-      font-size: 11px;
+      font-size: 10px;
       color: #888;
-      margin-top: 5px;
+      margin-top: 4px;
     }
 
     /* Modal Styles */
@@ -239,7 +245,6 @@
     #send-btn:disabled { background: #CCC; cursor: not-allowed; }
     #send-btn.sending { opacity: 0.7; pointer-events: none; }
 
-    /* Date Picker Dropdown */
     #date-dropdown {
       position: absolute;
       bottom: 85px;
@@ -265,13 +270,13 @@
 </head>
 <body>
   <div class="artboard">
-    <!-- Restored Visual Elements -->
     <div class="to-do-first">To do first ></div>
 
     <div class="grid-container">
       <!-- Q1 -->
       <div class="quadrant q-top-left" onclick="openModal('q1')">
         <div class="big-text text-now-focus">NOW<br>FOCUS</div>
+        <div class="add-plus">+</div>
         <div class="task-container" id="tasks-q1"></div>
         <div class="small-white-text as-soon-as">&lt; AS SOON AS POSSIBLE</div>
       </div>
@@ -279,18 +284,21 @@
       <!-- Q2 -->
       <div class="quadrant q-top-right" onclick="openModal('q2')">
         <div class="big-text text-focus-top">FOCUS</div>
+        <div class="add-plus">+</div>
         <div class="task-container" id="tasks-q2"></div>
       </div>
 
       <!-- Q3 -->
       <div class="quadrant q-bottom-left" onclick="openModal('q3')">
         <div class="big-text text-now-bottom">NOW</div>
+        <div class="add-plus">+</div>
         <div class="task-container" id="tasks-q3"></div>
       </div>
 
       <!-- Q4 -->
       <div class="quadrant q-bottom-right" onclick="openModal('q4')">
         <div class="big-text text-focus-cancelled">FOCUS</div>
+        <div class="add-plus">+</div>
         <div class="task-container" id="tasks-q4"></div>
       </div>
     </div>
@@ -372,7 +380,6 @@
         hideDateDropdown();
       } else {
         dropdown.style.display = 'flex';
-        // Add one-time listener to document for clicking outside
         document.addEventListener('click', handleOutsideClick);
       }
     }
@@ -386,7 +393,6 @@
       const dropdown = document.getElementById('date-dropdown');
       const clockBtn = document.getElementById('clock-btn');
       const dateToggle = document.getElementById('date-toggle');
-      
       if (!dropdown.contains(e.target) && !clockBtn.contains(e.target) && !dateToggle.contains(e.target)) {
         hideDateDropdown();
       }
