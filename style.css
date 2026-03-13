@@ -9,40 +9,12 @@ body {
 }
 
 .container {
-  width: 90%;
-  max-width: 1000px;
+  width: 95%;
+  max-width: 1200px;
   background: white;
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.input-area {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-}
-
-input[type="text"] {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  flex-grow: 1;
-}
-
-select, button {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background-color: white;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #eee;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .matrix-wrapper {
@@ -54,31 +26,59 @@ button:hover {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
-  gap: 10px;
-  background-color: #eee;
-  padding: 10px;
+  gap: 12px;
+  background-color: #ddd;
+  padding: 12px;
   border-radius: 8px;
 }
 
 .quadrant {
-  background-color: white;
-  min-height: 250px;
+  min-height: 300px;
   padding: 15px;
-  border-radius: 4px;
+  border-radius: 6px;
   display: flex;
   flex-direction: column;
+  transition: background-color 0.3s ease;
 }
 
-#q1 { background-color: #ffebee; } /* Reddish for Urgent/Important */
-#q2 { background-color: #e8f5e9; } /* Greenish for Important/Not Urgent */
-#q3 { background-color: #fff3e0; } /* Orangeish for Urgent/Not Important */
-#q4 { background-color: #f5f5f5; } /* Grey for Neither */
+/* Quadrant Colors */
+#q1 { background-color: #ff8a80; } /* 빨강 (중요/급함) */
+#q2 { background-color: #ffebee; } /* 연빨강 (중요/여유) */
+#q3 { background-color: #81c784; } /* 초록 (일반/급함) */
+#q4 { background-color: #e8f5e9; } /* 연초록 (일반/여유) */
+
+.quadrant-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  padding-bottom: 8px;
+}
 
 .quadrant h2 {
-  font-size: 1.1rem;
-  margin-top: 0;
-  border-bottom: 1px solid rgba(0,0,0,0.1);
-  padding-bottom: 10px;
+  font-size: 1rem;
+  margin: 0;
+  color: #333;
+}
+
+.add-btn {
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 4px;
+  width: 24px;
+  height: 24px;
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background 0.2s;
+}
+
+.add-btn:hover {
+  background: white;
 }
 
 .task-list {
@@ -89,15 +89,17 @@ button:hover {
 }
 
 .task-item {
-  background: white;
-  margin: 8px 0;
-  padding: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  margin-bottom: 6px;
+  padding: 8px 12px;
   border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
   display: flex;
   justify-content: space-between;
   align-items: center;
   cursor: grab;
+  font-size: 0.9rem;
+  min-height: 30px; /* 낮은 height 카드 형태 */
 }
 
 .task-item:active {
@@ -108,22 +110,23 @@ button:hover {
   background: #ff5252;
   color: white;
   border: none;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 0.8rem;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 0.7rem;
   cursor: pointer;
+  opacity: 0.7;
 }
 
 .delete-btn:hover {
-  background: #ff1744;
+  opacity: 1;
 }
 
 /* Axis Labels */
 .axis {
   position: absolute;
   font-weight: bold;
-  color: #555;
-  text-transform: uppercase;
+  color: #666;
+  font-size: 0.9rem;
 }
 
 .y-axis {

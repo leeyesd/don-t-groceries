@@ -8,35 +8,79 @@
 </head>
 <body>
   <div class="container">
-    <div class="input-area">
-      <input type="text" id="taskInput" placeholder="새로운 작업을 입력하세요...">
-      <select id="quadrantSelect">
-        <option value="q1">중요하고 급한 일</option>
-        <option value="q2">중요하지만 급하지 않은 일</option>
-        <option value="q3">중요하지 않지만 급한 일</option>
-        <option value="q4">중요하지 않고 급하지 않은 일</option>
-      </select>
-      <button onclick="addTask()">추가</button>
-    </div>
-
     <div class="matrix-wrapper">
       <div class="axis y-axis">중요한 것</div>
       <div class="matrix">
+        <!-- Q1: 중요하고 급한 일 -->
         <div id="q1" class="quadrant" ondrop="drop(event)" ondragover="allowDrop(event)">
-          <h2>중요하고 급한 일</h2>
-          <ul class="task-list"></ul>
+          <div class="quadrant-header">
+            <h2>중요하고 급한 일</h2>
+            <button class="add-btn" onclick="promptAddTask('q1')">+</button>
+          </div>
+          <ul class="task-list">
+            <li class="task-item" draggable="true" ondragstart="drag(event)" id="sample-1">
+              <span>긴급 보고서 작성</span>
+              <button class="delete-btn" onclick="deleteTask(event)">삭제</button>
+            </li>
+            <li class="task-item" draggable="true" ondragstart="drag(event)" id="sample-2">
+              <span>서버 장애 대응</span>
+              <button class="delete-btn" onclick="deleteTask(event)">삭제</button>
+            </li>
+          </ul>
         </div>
+
+        <!-- Q2: 중요하지만 여유로운 일 -->
         <div id="q2" class="quadrant" ondrop="drop(event)" ondragover="allowDrop(event)">
-          <h2>중요하지만 급하지 않은 일</h2>
-          <ul class="task-list"></ul>
+          <div class="quadrant-header">
+            <h2>중요하지만 여유로운 일</h2>
+            <button class="add-btn" onclick="promptAddTask('q2')">+</button>
+          </div>
+          <ul class="task-list">
+            <li class="task-item" draggable="true" ondragstart="drag(event)" id="sample-3">
+              <span>외국어 공부</span>
+              <button class="delete-btn" onclick="deleteTask(event)">삭제</button>
+            </li>
+            <li class="task-item" draggable="true" ondragstart="drag(event)" id="sample-4">
+              <span>운동 및 건강 관리</span>
+              <button class="delete-btn" onclick="deleteTask(event)">삭제</button>
+            </li>
+          </ul>
         </div>
+
+        <!-- Q3: 중요하지 않지만 급한 일 -->
         <div id="q3" class="quadrant" ondrop="drop(event)" ondragover="allowDrop(event)">
-          <h2>중요하지 않지만 급한 일</h2>
-          <ul class="task-list"></ul>
+          <div class="quadrant-header">
+            <h2>중요하지 않지만 급한 일</h2>
+            <button class="add-btn" onclick="promptAddTask('q3')">+</button>
+          </div>
+          <ul class="task-list">
+            <li class="task-item" draggable="true" ondragstart="drag(event)" id="sample-5">
+              <span>단순 이메일 회신</span>
+              <button class="delete-btn" onclick="deleteTask(event)">삭제</button>
+            </li>
+            <li class="task-item" draggable="true" ondragstart="drag(event)" id="sample-6">
+              <span>예약 확인 전화</span>
+              <button class="delete-btn" onclick="deleteTask(event)">삭제</button>
+            </li>
+          </ul>
         </div>
+
+        <!-- Q4: 중요하지 않고 여유로운 일 -->
         <div id="q4" class="quadrant" ondrop="drop(event)" ondragover="allowDrop(event)">
-          <h2>중요하지 않고 급하지 않은 일</h2>
-          <ul class="task-list"></ul>
+          <div class="quadrant-header">
+            <h2>중요하지 않고 여유로운 일</h2>
+            <button class="add-btn" onclick="promptAddTask('q4')">+</button>
+          </div>
+          <ul class="task-list">
+            <li class="task-item" draggable="true" ondragstart="drag(event)" id="sample-7">
+              <span>웹 서핑</span>
+              <button class="delete-btn" onclick="deleteTask(event)">삭제</button>
+            </li>
+            <li class="task-item" draggable="true" ondragstart="drag(event)" id="sample-8">
+              <span>SNS 확인</span>
+              <button class="delete-btn" onclick="deleteTask(event)">삭제</button>
+            </li>
+          </ul>
         </div>
       </div>
       <div class="axis x-axis">급한 것</div>

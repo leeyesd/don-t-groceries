@@ -1,19 +1,13 @@
-function addTask() {
-  const taskInput = document.getElementById('taskInput');
-  const quadrantSelect = document.getElementById('quadrantSelect');
-  const taskText = taskInput.value.trim();
-  const quadrantId = quadrantSelect.value;
-
-  if (taskText === "") {
-    alert("작업 내용을 입력하세요.");
+function promptAddTask(quadrantId) {
+  const taskText = prompt("새로운 작업을 입력하세요:");
+  
+  if (taskText === null || taskText.trim() === "") {
     return;
   }
 
-  const taskItem = createTaskElement(taskText);
+  const taskItem = createTaskElement(taskText.trim());
   const targetQuadrant = document.getElementById(quadrantId).querySelector('.task-list');
   targetQuadrant.appendChild(taskItem);
-
-  taskInput.value = "";
 }
 
 function createTaskElement(text) {
@@ -50,13 +44,9 @@ function drop(ev) {
   const taskElement = document.getElementById(data);
   
   // Find the closest task-list or quadrant
-  const target = ev.target.closest('.quadrant').querySelector('.task-list');
-  target.appendChild(taskElement);
+  const quadrant = ev.target.closest('.quadrant');
+  if (quadrant) {
+    const target = quadrant.querySelector('.task-list');
+    target.appendChild(taskElement);
+  }
 }
-
-// Allow adding task with Enter key
-document.getElementById('taskInput').addEventListener('keypress', function (e) {
-    if (e.key === 'Enter') {
-        addTask();
-    }
-});
