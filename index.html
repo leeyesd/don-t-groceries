@@ -2,8 +2,8 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=1440">
-  <title>Eisenhower Matrix - Precise Reconstruction</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eisenhower Matrix - Interactive</title>
   <style>
     /* Reset and Base Styles */
     * {
@@ -15,20 +15,20 @@
     body {
       background-color: #FFFFFF;
       font-family: Arial, Helvetica, sans-serif;
-      width: 1440px;
-      height: 1024px;
-      overflow: hidden;
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
+      overflow-x: hidden;
     }
 
-    /* Artboard Container */
+    /* Artboard Container - Centered and scaled for larger screens */
     .artboard {
       position: relative;
       width: 1440px;
       height: 1024px;
       background-color: #FFFFFF;
+      flex-shrink: 0;
     }
 
     /* Main Grid Area */
@@ -49,6 +49,8 @@
       position: relative;
       width: 100%;
       height: 100%;
+      cursor: pointer;
+      overflow: hidden;
     }
 
     /* Specific Quadrant Colors */
@@ -57,112 +59,223 @@
     .q-bottom-left { background-color: #58E9B8; }
     .q-bottom-right { background-color: #E2E2E0; }
 
-    /* Large Text Styles */
+    /* Titles - Adjusted Size and Margins */
     .big-text {
       position: absolute;
       color: #000000;
-      font-size: 110px;
+      font-size: 80px; /* Reduced from 110px */
       font-weight: 400;
       letter-spacing: -2px;
       line-height: 1;
       text-transform: uppercase;
+      z-index: 1;
+      pointer-events: none;
     }
 
-    /* Positioning for Large Texts */
-    .text-now-focus {
-      left: 45px;
-      top: 45px;
-    }
-
-    .text-focus-top {
-      left: 45px;
-      top: 45px;
-    }
-
-    .text-now-bottom {
-      left: 45px;
-      bottom: 45px;
-    }
-
+    /* Narrower Margins for Titles */
+    .text-now-focus { left: 25px; top: 25px; }
+    .text-focus-top { left: 25px; top: 25px; }
+    .text-now-bottom { left: 25px; bottom: 25px; }
     .text-focus-cancelled {
-      left: 45px;
-      bottom: 45px;
+      left: 25px;
+      bottom: 25px;
       color: #A19D99;
       text-decoration: line-through;
-      text-decoration-thickness: 10px;
+      text-decoration-thickness: 6px;
+    }
+
+    /* Task Card Container */
+    .task-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: 120px 25px 25px 25px; /* Top padding to avoid title overlap */
+      display: flex;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    /* Special padding for bottom quadrants to avoid bottom-aligned titles */
+    .q-bottom-left .task-container, 
+    .q-bottom-right .task-container {
+      padding: 25px 25px 120px 25px;
+    }
+
+    /* Task Card Style */
+    .task-card {
+      width: calc(50% - 5px); /* 1/2 quadrant width minus gap */
+      height: 80px; /* Adjusted to allow ~4 rows comfortably */
+      background: rgba(255, 255, 255, 0.9);
+      padding: 10px;
+      font-size: 16px;
+      color: #333;
+      border: 1px solid rgba(0,0,0,0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      word-break: break-all;
+      pointer-events: auto;
     }
 
     /* Small White Text Styles */
     .small-white-text {
       position: absolute;
       color: #FFFFFF;
-      font-size: 24px;
+      font-size: 18px;
       font-weight: 400;
       text-transform: uppercase;
       letter-spacing: 1px;
+      pointer-events: none;
     }
 
-    /* Positioning for Small Texts */
-    .as-soon-as {
-      left: 45px;
-      bottom: 25px;
-    }
-
+    .as-soon-as { left: 25px; bottom: 15px; }
     .to-do-first {
       position: absolute;
       color: #FFFFFF;
-      font-size: 24px;
+      font-size: 18px;
       text-transform: uppercase;
       transform: rotate(-90deg);
       transform-origin: left bottom;
-      /* Positioning near the center boundary between TL and TR */
-      left: 615px; 
-      top: 45px;
+      left: 610px; 
+      top: 25px;
       white-space: nowrap;
+      pointer-events: none;
     }
 
-    /* Cancelled Line adjustment for bottom right */
-    .text-focus-cancelled::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 50%;
-        width: 100%;
-        height: 12px;
-        background-color: #A19D99;
-        transform: translateY(-50%);
-        display: none; /* Using text-decoration for simplicity, but can use this for exact thickness */
+    /* Popup Modal Styles */
+    #modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.3);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
     }
 
+    .modal-content {
+      background: white;
+      width: 600px; /* Wide width */
+      height: 120px; /* Low height */
+      padding: 20px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .modal-content input {
+      flex: 1;
+      height: 50px;
+      padding: 0 15px;
+      font-size: 18px;
+      border: 2px solid #ddd;
+      outline: none;
+    }
+
+    .modal-content button {
+      width: 80px;
+      height: 50px;
+      background: #000;
+      color: #fff;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 16px;
+    }
   </style>
 </head>
 <body>
   <div class="artboard">
-    <!-- Vertical Label on Boundary -->
     <div class="to-do-first">To do first ></div>
 
     <div class="grid-container">
-      <!-- Top Left: Red -->
-      <div class="quadrant q-top-left">
+      <!-- Top Left -->
+      <div class="quadrant q-top-left" onclick="openModal('q1')">
         <div class="big-text text-now-focus">NOW<br>FOCUS</div>
+        <div class="task-container" id="tasks-q1"></div>
         <div class="small-white-text as-soon-as">&lt; AS SOON AS POSSIBLE</div>
       </div>
 
-      <!-- Top Right: Light Purple -->
-      <div class="quadrant q-top-right">
+      <!-- Top Right -->
+      <div class="quadrant q-top-right" onclick="openModal('q2')">
         <div class="big-text text-focus-top">FOCUS</div>
+        <div class="task-container" id="tasks-q2"></div>
       </div>
 
-      <!-- Bottom Left: Mint -->
-      <div class="quadrant q-bottom-left">
+      <!-- Bottom Left -->
+      <div class="quadrant q-bottom-left" onclick="openModal('q3')">
         <div class="big-text text-now-bottom">NOW</div>
+        <div class="task-container" id="tasks-q3"></div>
       </div>
 
-      <!-- Bottom Right: Light Grey -->
-      <div class="quadrant q-bottom-right">
+      <!-- Bottom Right -->
+      <div class="quadrant q-bottom-right" onclick="openModal('q4')">
         <div class="big-text text-focus-cancelled">FOCUS</div>
+        <div class="task-container" id="tasks-q4"></div>
       </div>
     </div>
   </div>
+
+  <!-- Modal -->
+  <div id="modal-overlay">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <input type="text" id="task-input" placeholder="작업 내용을 입력하세요..." onkeypress="handleKey(event)">
+      <button onclick="addTask()">GO</button>
+    </div>
+  </div>
+
+  <script>
+    let currentQuadrant = null;
+
+    function openModal(quadrantId) {
+      currentQuadrant = quadrantId;
+      document.getElementById('modal-overlay').style.display = 'flex';
+      document.getElementById('task-input').focus();
+    }
+
+    function closeModal() {
+      document.getElementById('modal-overlay').style.display = 'none';
+      document.getElementById('task-input').value = '';
+    }
+
+    function addTask() {
+      const input = document.getElementById('task-input');
+      const text = input.value.trim();
+      
+      if (text && currentQuadrant) {
+        const container = document.getElementById('tasks-' + currentQuadrant);
+        const card = document.createElement('div');
+        card.className = 'task-card';
+        card.textContent = text;
+        
+        // Simple click on card to delete it
+        card.onclick = (e) => {
+          e.stopPropagation();
+          card.remove();
+        };
+
+        container.appendChild(card);
+      }
+      closeModal();
+    }
+
+    function handleKey(e) {
+      if (e.key === 'Enter') {
+        addTask();
+      }
+    }
+
+    // Close modal when clicking overlay
+    document.getElementById('modal-overlay').onclick = closeModal;
+  </script>
 </body>
 </html>
