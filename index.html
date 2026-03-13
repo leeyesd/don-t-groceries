@@ -1,89 +1,168 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Eisenhower Matrix</title>
-  <link href="/style.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1440">
+  <title>Eisenhower Matrix - Precise Reconstruction</title>
+  <style>
+    /* Reset and Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #FFFFFF;
+      font-family: Arial, Helvetica, sans-serif;
+      width: 1440px;
+      height: 1024px;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Artboard Container */
+    .artboard {
+      position: relative;
+      width: 1440px;
+      height: 1024px;
+      background-color: #FFFFFF;
+    }
+
+    /* Main Grid Area */
+    .grid-container {
+      position: absolute;
+      left: 97px;
+      top: 69px;
+      width: 1246px;
+      height: 885px;
+      display: grid;
+      grid-template-columns: 623px 623px;
+      grid-template-rows: 442.5px 442.5px;
+      gap: 0;
+    }
+
+    /* Quadrant Base */
+    .quadrant {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Specific Quadrant Colors */
+    .q-top-left { background-color: #F44835; }
+    .q-top-right { background-color: #E1C0FC; }
+    .q-bottom-left { background-color: #58E9B8; }
+    .q-bottom-right { background-color: #E2E2E0; }
+
+    /* Large Text Styles */
+    .big-text {
+      position: absolute;
+      color: #000000;
+      font-size: 110px;
+      font-weight: 400;
+      letter-spacing: -2px;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    /* Positioning for Large Texts */
+    .text-now-focus {
+      left: 45px;
+      top: 45px;
+    }
+
+    .text-focus-top {
+      left: 45px;
+      top: 45px;
+    }
+
+    .text-now-bottom {
+      left: 45px;
+      bottom: 45px;
+    }
+
+    .text-focus-cancelled {
+      left: 45px;
+      bottom: 45px;
+      color: #A19D99;
+      text-decoration: line-through;
+      text-decoration-thickness: 10px;
+    }
+
+    /* Small White Text Styles */
+    .small-white-text {
+      position: absolute;
+      color: #FFFFFF;
+      font-size: 24px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Positioning for Small Texts */
+    .as-soon-as {
+      left: 45px;
+      bottom: 25px;
+    }
+
+    .to-do-first {
+      position: absolute;
+      color: #FFFFFF;
+      font-size: 24px;
+      text-transform: uppercase;
+      transform: rotate(-90deg);
+      transform-origin: left bottom;
+      /* Positioning near the center boundary between TL and TR */
+      left: 615px; 
+      top: 45px;
+      white-space: nowrap;
+    }
+
+    /* Cancelled Line adjustment for bottom right */
+    .text-focus-cancelled::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 100%;
+        height: 12px;
+        background-color: #A19D99;
+        transform: translateY(-50%);
+        display: none; /* Using text-decoration for simplicity, but can use this for exact thickness */
+    }
+
+  </style>
 </head>
 <body>
-  <div class="container">
-    <div class="matrix-wrapper">
-      <div class="matrix">
-        <!-- Q1: 중요긴급 -->
-        <div id="q1" class="quadrant" ondrop="drop(event)" ondragover="allowDrop(event)">
-          <div class="quadrant-header">
-            <h2>중요긴급</h2>
-            <button class="add-btn" onclick="promptAddTask('q1')">+</button>
-          </div>
-          <ul class="task-list">
-            <li class="task-item" draggable="true" ondragstart="drag(event)" id="sample-1">
-              <span>긴급 보고서 작성</span>
-              <button class="delete-btn" onclick="deleteTask(event)">삭제</button>
-            </li>
-            <li class="task-item" draggable="true" ondragstart="drag(event)" id="sample-2">
-              <span>서버 장애 대응</span>
-              <button class="delete-btn" onclick="deleteTask(event)">삭제</button>
-            </li>
-          </ul>
-        </div>
+  <div class="artboard">
+    <!-- Vertical Label on Boundary -->
+    <div class="to-do-first">To do first ></div>
 
-        <!-- Q2: 중요여유 -->
-        <div id="q2" class="quadrant" ondrop="drop(event)" ondragover="allowDrop(event)">
-          <div class="quadrant-header">
-            <h2>중요여유</h2>
-            <button class="add-btn" onclick="promptAddTask('q2')">+</button>
-          </div>
-          <ul class="task-list">
-            <li class="task-item" draggable="true" ondragstart="drag(event)" id="sample-3">
-              <span>외국어 공부</span>
-              <button class="delete-btn" onclick="deleteTask(event)">삭제</button>
-            </li>
-            <li class="task-item" draggable="true" ondragstart="drag(event)" id="sample-4">
-              <span>운동 및 건강 관리</span>
-              <button class="delete-btn" onclick="deleteTask(event)">삭제</button>
-            </li>
-          </ul>
-        </div>
+    <div class="grid-container">
+      <!-- Top Left: Red -->
+      <div class="quadrant q-top-left">
+        <div class="big-text text-now-focus">NOW<br>FOCUS</div>
+        <div class="small-white-text as-soon-as">&lt; AS SOON AS POSSIBLE</div>
+      </div>
 
-        <!-- Q3: 일반긴급 -->
-        <div id="q3" class="quadrant" ondrop="drop(event)" ondragover="allowDrop(event)">
-          <div class="quadrant-header">
-            <h2>일반긴급</h2>
-            <button class="add-btn" onclick="promptAddTask('q3')">+</button>
-          </div>
-          <ul class="task-list">
-            <li class="task-item" draggable="true" ondragstart="drag(event)" id="sample-5">
-              <span>단순 이메일 회신</span>
-              <button class="delete-btn" onclick="deleteTask(event)">삭제</button>
-            </li>
-            <li class="task-item" draggable="true" ondragstart="drag(event)" id="sample-6">
-              <span>예약 확인 전화</span>
-              <button class="delete-btn" onclick="deleteTask(event)">삭제</button>
-            </li>
-          </ul>
-        </div>
+      <!-- Top Right: Light Purple -->
+      <div class="quadrant q-top-right">
+        <div class="big-text text-focus-top">FOCUS</div>
+      </div>
 
-        <!-- Q4: 일반여유 -->
-        <div id="q4" class="quadrant" ondrop="drop(event)" ondragover="allowDrop(event)">
-          <div class="quadrant-header">
-            <h2>일반여유</h2>
-            <button class="add-btn" onclick="promptAddTask('q4')">+</button>
-          </div>
-          <ul class="task-list">
-            <li class="task-item" draggable="true" ondragstart="drag(event)" id="sample-7">
-              <span>웹 서핑</span>
-              <button class="delete-btn" onclick="deleteTask(event)">삭제</button>
-            </li>
-            <li class="task-item" draggable="true" ondragstart="drag(event)" id="sample-8">
-              <span>SNS 확인</span>
-              <button class="delete-btn" onclick="deleteTask(event)">삭제</button>
-            </li>
-          </ul>
-        </div>
+      <!-- Bottom Left: Mint -->
+      <div class="quadrant q-bottom-left">
+        <div class="big-text text-now-bottom">NOW</div>
+      </div>
+
+      <!-- Bottom Right: Light Grey -->
+      <div class="quadrant q-bottom-right">
+        <div class="big-text text-focus-cancelled">FOCUS</div>
       </div>
     </div>
   </div>
-  <script defer src="/main.js"></script>
 </body>
 </html>
