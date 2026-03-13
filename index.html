@@ -1,14 +1,47 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hello World</title>
-  <link href='/style.css' rel='stylesheet'>
+  <title>Eisenhower Matrix</title>
+  <link href="/style.css" rel="stylesheet">
 </head>
 <body>
-  <h1>Hello, world!</h1>
-  <button onclick="console.log('hello');">Press me</button>
-  <script defer type="text/javascript" src="/main.js"></script>
+  <div class="container">
+    <div class="input-area">
+      <input type="text" id="taskInput" placeholder="새로운 작업을 입력하세요...">
+      <select id="quadrantSelect">
+        <option value="q1">중요하고 급한 일</option>
+        <option value="q2">중요하지만 급하지 않은 일</option>
+        <option value="q3">중요하지 않지만 급한 일</option>
+        <option value="q4">중요하지 않고 급하지 않은 일</option>
+      </select>
+      <button onclick="addTask()">추가</button>
+    </div>
+
+    <div class="matrix-wrapper">
+      <div class="axis y-axis">중요한 것</div>
+      <div class="matrix">
+        <div id="q1" class="quadrant" ondrop="drop(event)" ondragover="allowDrop(event)">
+          <h2>중요하고 급한 일</h2>
+          <ul class="task-list"></ul>
+        </div>
+        <div id="q2" class="quadrant" ondrop="drop(event)" ondragover="allowDrop(event)">
+          <h2>중요하지만 급하지 않은 일</h2>
+          <ul class="task-list"></ul>
+        </div>
+        <div id="q3" class="quadrant" ondrop="drop(event)" ondragover="allowDrop(event)">
+          <h2>중요하지 않지만 급한 일</h2>
+          <ul class="task-list"></ul>
+        </div>
+        <div id="q4" class="quadrant" ondrop="drop(event)" ondragover="allowDrop(event)">
+          <h2>중요하지 않고 급하지 않은 일</h2>
+          <ul class="task-list"></ul>
+        </div>
+      </div>
+      <div class="axis x-axis">급한 것</div>
+    </div>
+  </div>
+  <script defer src="/main.js"></script>
 </body>
 </html>
