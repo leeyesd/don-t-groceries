@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eisenhower Matrix - Interactive</title>
+  <title>Eisenhower Matrix - Advanced Input</title>
   <style>
     /* Reset and Base Styles */
     * {
@@ -22,7 +22,6 @@
       overflow-x: hidden;
     }
 
-    /* Artboard Container - Centered and scaled for larger screens */
     .artboard {
       position: relative;
       width: 1440px;
@@ -31,7 +30,6 @@
       flex-shrink: 0;
     }
 
-    /* Main Grid Area */
     .grid-container {
       position: absolute;
       left: 97px;
@@ -44,7 +42,6 @@
       gap: 0;
     }
 
-    /* Quadrant Base */
     .quadrant {
       position: relative;
       width: 100%;
@@ -53,17 +50,15 @@
       overflow: hidden;
     }
 
-    /* Specific Quadrant Colors */
     .q-top-left { background-color: #F44835; }
     .q-top-right { background-color: #E1C0FC; }
     .q-bottom-left { background-color: #58E9B8; }
     .q-bottom-right { background-color: #E2E2E0; }
 
-    /* Titles - Adjusted Size and Margins */
     .big-text {
       position: absolute;
       color: #000000;
-      font-size: 80px; /* Reduced from 110px */
+      font-size: 80px;
       font-weight: 400;
       letter-spacing: -2px;
       line-height: 1;
@@ -72,7 +67,6 @@
       pointer-events: none;
     }
 
-    /* Narrower Margins for Titles */
     .text-now-focus { left: 25px; top: 25px; }
     .text-focus-top { left: 25px; top: 25px; }
     .text-now-bottom { left: 25px; bottom: 25px; }
@@ -84,14 +78,13 @@
       text-decoration-thickness: 6px;
     }
 
-    /* Task Card Container */
     .task-container {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      padding: 120px 25px 25px 25px; /* Top padding to avoid title overlap */
+      padding: 120px 25px 25px 25px;
       display: flex;
       flex-wrap: wrap;
       align-content: flex-start;
@@ -99,41 +92,191 @@
       pointer-events: none;
     }
 
-    /* Special padding for bottom quadrants to avoid bottom-aligned titles */
     .q-bottom-left .task-container, 
     .q-bottom-right .task-container {
       padding: 25px 25px 120px 25px;
     }
 
-    /* Task Card Style */
     .task-card {
-      width: calc(50% - 5px); /* 1/2 quadrant width minus gap */
-      height: 80px; /* Adjusted to allow ~4 rows comfortably */
+      width: calc(50% - 5px);
+      min-height: 60px;
       background: rgba(255, 255, 255, 0.9);
       padding: 10px;
-      font-size: 16px;
+      font-size: 14px;
       color: #333;
       border: 1px solid rgba(0,0,0,0.05);
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      word-break: break-all;
       pointer-events: auto;
     }
 
-    /* Small White Text Styles */
-    .small-white-text {
-      position: absolute;
-      color: #FFFFFF;
-      font-size: 18px;
-      font-weight: 400;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+    .task-card .date-label {
+      font-size: 10px;
+      color: #888;
+      margin-top: 4px;
+    }
+
+    /* Modal Styles */
+    #modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.4);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .modal-content {
+      background: #FFFFFF;
+      width: 700px;
+      min-height: 160px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+    }
+
+    .input-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    #task-input {
+      width: 100%;
+      min-height: 60px;
+      border: none;
+      outline: none;
+      font-size: 20px;
+      resize: none;
+      font-family: inherit;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #EEE;
+      padding-top: 16px;
+    }
+
+    .options-group {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+    }
+
+    .icon-btn:hover { opacity: 1; }
+    .icon-btn:disabled { cursor: not-allowed; opacity: 0.3; }
+
+    /* Date Toggle Label */
+    #date-toggle {
+      background: #F0F0F0;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 13px;
+      color: #333;
+      display: none; /* Hidden by default */
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    #date-toggle .clear-date {
+      font-weight: bold;
+      color: #999;
+    }
+
+    /* Send Button */
+    #send-btn {
+      background: #000;
+      color: #FFF;
+      border: none;
+      padding: 10px 24px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.2s, opacity 0.2s;
+    }
+
+    #send-btn:disabled {
+      background: #CCC;
+      cursor: not-allowed;
+    }
+
+    #send-btn.sending {
+      opacity: 0.7;
       pointer-events: none;
     }
 
-    .as-soon-as { left: 25px; bottom: 15px; }
+    /* Date Picker Dropdown (iOS Style) */
+    #date-dropdown {
+      position: absolute;
+      bottom: 80px;
+      left: 24px;
+      background: white;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      border-radius: 12px;
+      width: 280px;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 110;
+    }
+
+    .date-presets {
+      display: flex;
+      flex-direction: column;
+      border-bottom: 1px solid #EEE;
+    }
+
+    .preset-btn {
+      background: none;
+      border: none;
+      padding: 12px 20px;
+      text-align: left;
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .preset-btn:hover { background: #F9F9F9; }
+    .preset-btn span:last-child { color: #888; font-size: 13px; }
+
+    .calendar-picker {
+      padding: 12px;
+    }
+
+    .calendar-picker input {
+      width: 100%;
+      border: 1px solid #DDD;
+      padding: 8px;
+      border-radius: 6px;
+      outline: none;
+    }
+
+    /* Small White Label */
     .to-do-first {
       position: absolute;
       color: #FFFFFF;
@@ -146,51 +289,6 @@
       white-space: nowrap;
       pointer-events: none;
     }
-
-    /* Popup Modal Styles */
-    #modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.3);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 100;
-    }
-
-    .modal-content {
-      background: white;
-      width: 600px; /* Wide width */
-      height: 120px; /* Low height */
-      padding: 20px;
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    }
-
-    .modal-content input {
-      flex: 1;
-      height: 50px;
-      padding: 0 15px;
-      font-size: 18px;
-      border: 2px solid #ddd;
-      outline: none;
-    }
-
-    .modal-content button {
-      width: 80px;
-      height: 50px;
-      background: #000;
-      color: #fff;
-      border: none;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 16px;
-    }
   </style>
 </head>
 <body>
@@ -198,26 +296,18 @@
     <div class="to-do-first">To do first ></div>
 
     <div class="grid-container">
-      <!-- Top Left -->
       <div class="quadrant q-top-left" onclick="openModal('q1')">
         <div class="big-text text-now-focus">NOW<br>FOCUS</div>
         <div class="task-container" id="tasks-q1"></div>
-        <div class="small-white-text as-soon-as">&lt; AS SOON AS POSSIBLE</div>
       </div>
-
-      <!-- Top Right -->
       <div class="quadrant q-top-right" onclick="openModal('q2')">
         <div class="big-text text-focus-top">FOCUS</div>
         <div class="task-container" id="tasks-q2"></div>
       </div>
-
-      <!-- Bottom Left -->
       <div class="quadrant q-bottom-left" onclick="openModal('q3')">
         <div class="big-text text-now-bottom">NOW</div>
         <div class="task-container" id="tasks-q3"></div>
       </div>
-
-      <!-- Bottom Right -->
       <div class="quadrant q-bottom-right" onclick="openModal('q4')">
         <div class="big-text text-focus-cancelled">FOCUS</div>
         <div class="task-container" id="tasks-q4"></div>
@@ -226,56 +316,161 @@
   </div>
 
   <!-- Modal -->
-  <div id="modal-overlay">
+  <div id="modal-overlay" onclick="closeModal()">
     <div class="modal-content" onclick="event.stopPropagation()">
-      <input type="text" id="task-input" placeholder="작업 내용을 입력하세요..." onkeypress="handleKey(event)">
-      <button onclick="addTask()">GO</button>
+      <div class="input-wrapper">
+        <textarea id="task-input" placeholder="할 일을 입력해주세요..." oninput="validate()" onkeydown="handleKeyDown(event)"></textarea>
+      </div>
+
+      <!-- Date Toggle Label (shown when date is selected) -->
+      <div id="date-toggle" onclick="toggleDateDropdown()">
+        <span id="date-text"></span>
+        <span class="clear-date" onclick="clearDate(event)">×</span>
+      </div>
+
+      <!-- Date Dropdown -->
+      <div id="date-dropdown">
+        <div class="date-presets">
+          <button class="preset-btn" onclick="setDate('today')"><span>오늘</span><span>오늘</span></button>
+          <button class="preset-btn" onclick="setDate('tomorrow')"><span>내일</span><span>내일</span></button>
+          <button class="preset-btn" onclick="setDate('weekend')"><span>이번 주말</span><span>토</span></button>
+        </div>
+        <div class="calendar-picker">
+          <input type="date" id="calendar-input" onchange="setDate('custom')">
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <div class="options-group">
+          <!-- Mic (Disabled) -->
+          <button class="icon-btn" disabled title="음성 입력 (준비 중)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          </button>
+          <!-- Clock (Time set) -->
+          <button class="icon-btn" onclick="toggleDateDropdown()" title="시간 설정">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </button>
+        </div>
+        <button id="send-btn" disabled onclick="sendTask()">GO</button>
+      </div>
     </div>
   </div>
 
   <script>
     let currentQuadrant = null;
+    let selectedDate = null;
 
     function openModal(quadrantId) {
       currentQuadrant = quadrantId;
       document.getElementById('modal-overlay').style.display = 'flex';
-      document.getElementById('task-input').focus();
+      const input = document.getElementById('task-input');
+      input.value = '';
+      input.focus();
+      clearDate();
+      validate();
     }
 
     function closeModal() {
       document.getElementById('modal-overlay').style.display = 'none';
-      document.getElementById('task-input').value = '';
+      document.getElementById('date-dropdown').style.display = 'none';
     }
 
-    function addTask() {
+    function validate() {
+      const text = document.getElementById('task-input').value.trim();
+      const sendBtn = document.getElementById('send-btn');
+      // In this version, we don't have file attachment UI, so text is the main validator
+      sendBtn.disabled = (text === "");
+    }
+
+    function handleKeyDown(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendTask();
+      }
+    }
+
+    function toggleDateDropdown() {
+      const dropdown = document.getElementById('date-dropdown');
+      dropdown.style.display = dropdown.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    function setDate(type) {
+      const today = new Date();
+      let d = new Date();
+
+      if (type === 'today') {
+        // Today
+      } else if (type === 'tomorrow') {
+        d.setDate(today.getDate() + 1);
+      } else if (type === 'weekend') {
+        // Find coming Saturday
+        const day = today.getDay();
+        const diff = (6 - day + 7) % 7 || 7;
+        d.setDate(today.getDate() + diff);
+      } else if (type === 'custom') {
+        d = new Date(document.getElementById('calendar-input').value);
+      }
+
+      const year = String(d.getFullYear()).slice(-2);
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const date = String(d.getDate()).padStart(2, '0');
+      
+      selectedDate = `${year}.${month}.${date}`;
+      
+      document.getElementById('date-text').textContent = selectedDate;
+      document.getElementById('date-toggle').style.display = 'flex';
+      document.getElementById('date-dropdown').style.display = 'none';
+    }
+
+    function clearDate(e) {
+      if (e) e.stopPropagation();
+      selectedDate = null;
+      document.getElementById('date-toggle').style.display = 'none';
+      document.getElementById('calendar-input').value = '';
+    }
+
+    function sendTask() {
       const input = document.getElementById('task-input');
       const text = input.value.trim();
-      
-      if (text && currentQuadrant) {
+      const sendBtn = document.getElementById('send-btn');
+
+      if (!text || sendBtn.disabled) return;
+
+      // Enter Sending State
+      sendBtn.classList.add('sending');
+      sendBtn.textContent = '...';
+      sendBtn.disabled = true;
+
+      // Simulate sending
+      setTimeout(() => {
         const container = document.getElementById('tasks-' + currentQuadrant);
         const card = document.createElement('div');
         card.className = 'task-card';
-        card.textContent = text;
         
-        // Simple click on card to delete it
+        const contentSpan = document.createElement('span');
+        contentSpan.textContent = text;
+        card.appendChild(contentSpan);
+
+        if (selectedDate) {
+          const dateSpan = document.createElement('span');
+          dateSpan.className = 'date-label';
+          dateSpan.textContent = selectedDate;
+          card.appendChild(dateSpan);
+        }
+
         card.onclick = (e) => {
           e.stopPropagation();
           card.remove();
         };
 
         container.appendChild(card);
-      }
-      closeModal();
-    }
 
-    function handleKey(e) {
-      if (e.key === 'Enter') {
-        addTask();
-      }
+        // Reset and close
+        sendBtn.classList.remove('sending');
+        sendBtn.textContent = 'GO';
+        closeModal();
+      }, 600);
     }
-
-    // Close modal when clicking overlay
-    document.getElementById('modal-overlay').onclick = closeModal;
   </script>
 </body>
 </html>
